@@ -5,6 +5,7 @@ class DataService {
     return http.get("/artists");
   }
   findOne(id) {
+    console.log("searching for id:", id);
     return http.get(`/artist/${id}`);
   }
   findOneByName(name) {

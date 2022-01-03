@@ -1,7 +1,9 @@
 <template>
   <h1>Artists</h1>
   <div v-for="artist in artists" :key="artist.id">
-    <div>{{ artist.name }}</div>
+    <router-link :to="{ name: 'Artist', params: { id: artist.id } }">{{
+      artist.name
+    }}</router-link>
   </div>
 </template>
 

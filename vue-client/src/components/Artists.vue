@@ -5,7 +5,7 @@
       <router-link :to="{ name: 'Artist', params: { id: artist.id } }">{{
         artist.name
       }}</router-link>
-    </div>  
+    </div>
   </div>
 </template>
 

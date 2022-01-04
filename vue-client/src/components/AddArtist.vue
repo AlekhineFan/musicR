@@ -4,8 +4,8 @@
     <form class="form-add-artist" @submit.prevent="handleSubmit">
       <input class="form-input" type="text" v-model="name" />
       <textarea class="form-input" type="text" v-model="description" />
-      <input class="form-input" type="text" v-model="tags">
-      <input class="form-input" type="text" v-model="links">
+      <input class="form-input" type="text" v-model="tags" />
+      <input class="form-input" type="text" v-model="links" />
       <div class="form-button-container">
         <button>Add</button>
         <button>Clear</button>

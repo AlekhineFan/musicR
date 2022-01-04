@@ -1,10 +1,27 @@
-const { mongoose } = require(".");
-
 module.exports = mongoose => {
   const schema = mongoose.Schema(
     {
-      name: String,
-      description: String,
+      name: {
+        type: String,
+        required: true
+      },
+      description: {
+        type: String,
+        required: true
+      },
+      isActive: {
+        type: Boolean,
+        required: true,
+        default: true
+      },
+      tags: {
+        type: [String],
+        default: []
+      },
+      links: {
+        type: [String],
+        default: []
+      }
     },
     {
       timestamps: true

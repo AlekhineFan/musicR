@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const connectToDb = require('./helpers/connectToDb')
-const { create, findAll, findOne } = require('./controllers/artists.controller.js')
+const { create, findAll, findByIdOrName } = require('./controllers/artists.controller.js')
 
 const app = express()
 let corsOptions = {
@@ -29,8 +29,8 @@ app.get('/artists', async (req, res) => {
 })
 
 app.get('/artist/:id', async (req, res) => {
-  console.log(`searching for artist with id: ${req.params.id}`)
-  const artist = await findOne(req.params.id)
+  console.log(`searching for artist: ${req.params.id}`)
+  const artist = await findByIdOrName(req.params.id)
   res.json(artist)
 })
 

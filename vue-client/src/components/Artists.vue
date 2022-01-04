@@ -1,9 +1,11 @@
 <template>
-  <h1>Artists</h1>
-  <div v-for="artist in artists" :key="artist.id">
-    <router-link :to="{ name: 'Artist', params: { id: artist.id } }">{{
-      artist.name
-    }}</router-link>
+  <div>
+    <h1>Artists</h1>
+    <div v-for="artist in artists" :key="artist.id">
+      <router-link :to="{ name: 'Artist', params: { id: artist.id } }">{{
+        artist.name
+      }}</router-link>
+    </div>  
   </div>
 </template>
 

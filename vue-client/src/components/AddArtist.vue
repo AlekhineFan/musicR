@@ -1,13 +1,17 @@
 <template>
-  <h1>Add Artist</h1>
-  <form class="form-add-artist" @submit.prevent="handleSubmit">
-    <input class="form-input" type="text" v-model="name" />
-    <textarea class="form-input" type="text" v-model="description" />
-    <div class="form-button-container">
-      <button>Add</button>
-      <button>Clear</button>
-    </div>
-  </form>
+  <div>
+    <h1>Add Artist</h1>
+    <form class="form-add-artist" @submit.prevent="handleSubmit">
+      <input class="form-input" type="text" v-model="name" />
+      <textarea class="form-input" type="text" v-model="description" />
+      <input class="form-input" type="text" v-model="tags">
+      <input class="form-input" type="text" v-model="links">
+      <div class="form-button-container">
+        <button>Add</button>
+        <button>Clear</button>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -18,6 +22,9 @@ export default {
   setup() {
     const name = ref("");
     const description = ref("");
+    const tags = ref([]);
+    const links = ref([]);
+
     const handleSubmit = async () => {
       console.log(name.value, description.value);
       await request.create({
@@ -26,7 +33,7 @@ export default {
       });
     };
 
-    return { name, description, handleSubmit };
+    return { name, description, handleSubmit, tags, links };
   },
 };
 </script>

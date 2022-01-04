@@ -1,6 +1,8 @@
 <template>
-  <h1>{{ name }}</h1>
-  <h4>{{ description }}</h4>
+  <div>
+    <h1>{{ name }}</h1>
+    <h4>{{ description }}</h4>
+  </div>
 </template>
 
 <script>

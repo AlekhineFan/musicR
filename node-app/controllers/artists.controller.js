@@ -1,9 +1,8 @@
-const { mongoose } = require('../models/index');
 const db = require('../models/index')
 const Artist = db.artists
-const { isObjectId } = require('../helpers/utils.js')
+const { isObjectId, convertToObjectID } = require('../helpers/utils.js')
 
-exports.create = async (req) => {
+exports.createArtist = async (req) => {
   let isSaved;
 
   try {
@@ -87,8 +86,4 @@ exports.softDeleteOne = async (id) => {
 exports.findAll = async () => {
   const artists = await Artist.find({})
   return artists;
-}
-
-function convertToObjectID(id) {
-  return mongoose.Types.ObjectId(id)
 }

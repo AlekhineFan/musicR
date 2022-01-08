@@ -25,29 +25,30 @@ exports.createUser = async (email, password) => {
 }
 
 exports.login = async (email, rawPassword) => {
-  let loginSuccessful = false
-  let reason
+  let reason = null
+  let userId = null
 
   try {
     const user = await User.find({ email: email })
     if (user.length > 0) {
       const { _id, password, salt } = user[0]
       const incomingPwWithSalt = generateSafePassword(rawPassword, salt)
+      userId = _id
 
       if (password === incomingPwWithSalt.hashed) {
         reason = 'matching email and password found'
-        return { loginSuccessful: true, reason, _id }
+        return { userId, reason }
       } else {
         reason = 'password mismatch'
-        return { loginSuccessful, reason }
+        return { userId, reason }
       }
     } else {
       reason = 'user not found by email'
-      return { loginSuccessful, reason }
+      return { userId: null, reason }
     }
   } catch (err) {
     reason = err
   }
 
-  return { loginSuccessful, reason }
+  return { userId, reason }
 }

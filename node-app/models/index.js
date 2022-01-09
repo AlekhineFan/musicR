@@ -5,7 +5,9 @@ mongoose.Promise = global.Promise
 const db = {}
 db.mongoose = mongoose
 db.url = dbConfig.url
-db.artists = require('./artists.model.js')(mongoose)
-db.users = require('./users.model.js')(mongoose)
+db.users = require('./users.model')(mongoose)
+db.artists = require('./artists.model')(mongoose)
+db.vendees = require('./vendees.model')(mongoose)
+db.gigs = require('./gigs.model')(mongoose)
 
 module.exports = db

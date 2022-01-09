@@ -3,6 +3,7 @@ module.exports = mongoose => {
     {
       email: {
         type: String,
+        unique: true,
         required: true
       },
       password: {
@@ -26,5 +27,5 @@ module.exports = mongoose => {
   })
 
   const User = mongoose.model('user', schema)
-  return User;
+  return User
 }

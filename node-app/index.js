@@ -1,10 +1,13 @@
 const express = require('express')
 const cors = require('cors')
-const cookiParser = require('cookie-parser')
+const morgan = require('morgan')
+const helmet = require('helmet')
+const rateLimit = require('express-rate-limit')
+const cookieParser = require('cookie-parser')
 const cookieSession = require('cookie-session')
 const connectToDb = require('./helpers/connectToDb')
-const { createArtist, findAll, findByIdOrName } = require('./controllers/artists.controller.js')
-const { createUser, login } = require('./controllers/users.controller.js')
+const { createArtist, findAll, findByIdOrName } = require('./controllers/artists.controller')
+const { createUserIfNotExists, login } = require('./controllers/users.controller')
 const { canProceedOnRoute } = require('./helpers/utils')
 
 const app = express()
@@ -12,10 +15,18 @@ let corsOptions = {
   origin: "http://localhost:8081"
 }
 
+const rateLimitOption = {
+  windowMs: 15 * 60 * 1000,
+  max: 200
+}
+
+app.use(morgan('common'))
+app.use(helmet())
+app.use(rateLimit(rateLimitOption))
 app.use(cors(corsOptions))
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-app.use(cookiParser())
+app.use(cookieParser())
 app.use(cookieSession({ keys: ['ksjfg5jc8ss44lfdiel3y'] }))
 
 app.use((req, res, next) => {
@@ -56,8 +67,8 @@ app.post('/artists', async (req, res) => {
 })
 
 app.post('/signup', async (req, res) => {
-  const { email, password } = req.body
-  const user = await createUser(email, password)
+  const { email, password, isArtist } = req.body
+  const user = await createUserIfNotExists(email, password, isArtist)
   const _id = user?._id
   console.log(_id)
   if (!_id) {
@@ -87,4 +98,8 @@ app.post('/signout', (req, res) => {
   req.session = null
   console.log("user signed out")
   res.sendStatus(200)
+})
+
+app.use((req, res) => {
+  res.sendStatus(400)
 })

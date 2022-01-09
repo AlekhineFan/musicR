@@ -1,25 +1,45 @@
-const db = require('../models/index')
-const User = db.users
-const { generateSafePassword } = require('../auth/passwords.js')
 
-exports.createUser = async (email, password) => {
+const db = require('../models/index')
+const { users: User, artists: Artist, vendees: Vendee, gigs: Gig } = db
+const { generateSafePassword } = require('../auth/passwords')
+const { LoginResult, SignupResult } = require('../enums/loginResults')
+
+exports.createUserIfNotExists = async (email, password, isArtist) => {
   try {
     const usersFound = await User.find({ email: email })
+
     if (usersFound.length > 0) {
-      console.log('email in use', email)
+      console.log(SignupResult.EmailAlreadyUsed, email)
       return null
     }
+
     const { hashed, salt } = generateSafePassword(password)
-    const user = new User({
+    const newUser = new User({
       email:email,
       password: hashed,
       salt: salt
     })
-    await user.save()
-    console.log('user created with email', email)
-    return user._id
+
+    await newUser.save()
+
+    if (isArtist) {
+      const artist = new Artist({
+        user: newUser._id
+      })
+      await artist.save()
+      console.log(SignupResult.ArtistCreated)
+    } else {
+      const vendee = new Vendee({
+        user: newUser._id
+      })
+      await vendee.save()
+      console.log(SignupResult.VendeeCreated)
+    }
+
+    console.log(SignupResult.Success, email)
+    return newUser._id
   } catch (err) {
-    console.log('creating user failed', email, err)
+    console.log(SignupResult.UserCreationFailure, email, err)
     return null
   }
 }
@@ -36,14 +56,14 @@ exports.login = async (email, rawPassword) => {
       userId = _id
 
       if (password === incomingPwWithSalt.hashed) {
-        reason = 'matching email and password found'
+        reason = LoginResult.Success
         return { userId, reason }
       } else {
-        reason = 'password mismatch'
+        reason = LoginResult.PasswordMismatch
         return { userId, reason }
       }
     } else {
-      reason = 'user not found by email'
+      reason = LoginResult.EmailNotFound
       return { userId: null, reason }
     }
   } catch (err) {

@@ -1,6 +1,6 @@
 const db = require('../models/index')
 const Artist = db.artists
-const { isObjectId, convertToObjectID } = require('../helpers/utils.js')
+const { isObjectId, convertToObjectID } = require('../helpers/utils')
 
 exports.createArtist = async (req) => {
   let isSaved;
